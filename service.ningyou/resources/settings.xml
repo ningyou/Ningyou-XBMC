@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="100">
+		<setting id="ningyou_username" type="text" default="" label="101" />
+		<setting id="ningyou_password" type="text" option="hidden" enable="!eq(-1,)" default="" label="102" />
+		<setting id="authorize" type="action" action="RunScript($CWD/resources/lib/authorize.py)" label="103" />
+		<setting id="ningyou_token" type="text" default="" label="104" />
+	</category>
+</settings>
