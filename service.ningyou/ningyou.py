@@ -25,6 +25,12 @@ class Ningyou(threading.Thread):
 		req = urllib2.Request(self.url, data)
 		response = urllib2.urlopen(req)
 		result = response.read()
+
+		try:
+			result = json.loads(result)
+		except:
+			result = None
+
 		return result
 
 	def findInList(self, id):
@@ -58,7 +64,6 @@ class Ningyou(threading.Thread):
 				info['list'] = self.findInList(info['tvshowid'])
 				if info['list'] and info['playcount'] > 0:
 					show_info = self.API('getshow', [info['list'],info['seriesid']])
-					show_info = json.loads(show_info)
 
 					if 'error' in show_info:
 						return xbmc.log('Ningyou: Error ' + show_info['error'])
@@ -67,10 +72,9 @@ class Ningyou(threading.Thread):
 						return xbmc.log('Ningyou: [%s] %s episode %d already marked as watched.' % (info['list'], info['tvshow'], info['episode']))
 
 					data = self.API("updateshow", [info['list'],info['seriesid'],info['episode']])
-					data = json.loads(data)
-					if 'error' in data:
+					if data and 'error' in data:
 						xbmc.log('Ningyou: Error ' + data['error'])
-					else:
+					elif data:
 						xbmc.log('Ningyou: [%s] Updated %s to episode %d successfully' % (info['list'], info['tvshow'], info['episode']))
 
 			elif data['method'] == 'System.OnQuit':
