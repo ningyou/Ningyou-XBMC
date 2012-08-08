@@ -11,7 +11,6 @@ class Ningyou(threading.Thread):
 	Addon = xbmcaddon.Addon(addon_id)
 	datadir = Addon.getAddonInfo('profile')
 	addondir = Addon.getAddonInfo('path')
-	sleep_time = 100
 	url = "http://ningyou-project.org/api"
 
 	def API(self, method, params = []):
