@@ -72,7 +72,7 @@ class Ningyou(threading.Thread):
 					if 'error' in show_info:
 						return xbmc.log('Ningyou: Error ' + show_info['error'])
 
-					if show_info['episodes'] >= info['episode'] or show_info['status'] == "Completed":
+					if int(show_info['episodes']) >= int(info['episode']) or show_info['status'] == "Completed":
 						return xbmc.log('Ningyou: [%s] %s episode %d already marked as watched.' % (info['list'], info['tvshow'], info['episode']))
 
 					data = self.API("updateshow", [info['list'],info['seriesid'],info['episode']])
