@@ -66,6 +66,9 @@ class Ningyou(threading.Thread):
 				if info['list'] and info['playcount'] > 0:
 					show_info = self.API('getshow', [info['list'],info['seriesid']])
 
+					if not show_info:
+						return xbmc.log('Ningyou: Bad or no response from server')
+
 					if 'error' in show_info:
 						return xbmc.log('Ningyou: Error ' + show_info['error'])
 
