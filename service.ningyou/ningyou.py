@@ -12,6 +12,7 @@ class Ningyou(threading.Thread):
 	datadir = Addon.getAddonInfo('profile')
 	addondir = Addon.getAddonInfo('path')
 	url = "http://ningyou-project.org/api"
+	abort = False
 
 	def API(self, method, params = []):
 		data = {
@@ -81,7 +82,7 @@ class Ningyou(threading.Thread):
 				self.abort = True
 
 	def run(self):
-		while(not xbmc.abortRequested or self.abort):
+		while(not (xbmc.abortRequested or self.abort)):
 			time.sleep(1)
 			try:
 				tn = telnetlib.Telnet('localhost', 9090, 10)
@@ -94,7 +95,7 @@ class Ningyou(threading.Thread):
 			bCount = 0
 			xbmc.log("Ningyou: connected.")
 
-			while(not xbmc.abortRequested or self.abort):
+			while(not (xbmc.abortRequested or self.abort)):
 				try:
 					if bCount == 0:
 						notification = ""
@@ -126,4 +127,5 @@ class Ningyou(threading.Thread):
 		except:
 			xbmc.log("Ningyou: Encountered error attempting to close the telnet connection")
 			raise
+		xbmc.log('Ningyou: exiting')
 		sys.exit(0)
