@@ -1,4 +1,4 @@
-import xbmc, xbmcaddon, os, sys, time
+import xbmc, xbmcaddon, xbmcvfs, os, sys, time
 import telnetlib
 import urllib, urllib2
 import threading
@@ -35,16 +35,17 @@ class Ningyou(threading.Thread):
 
 	def findInList(self, id):
 		lists = self.API('getlists')
-		lists = json.loads(lists)
-		for list in lists:
-			playlist = "special://videoplaylists/%s.xsp" % list['name']
-			query = xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"Files.GetDirectory","params":{"directory":"%s"},"id":1}' % playlist)
-			query = unicode(query, 'utf-8', errors='ignore')
-			response = json.loads(query)
-			files = response['result']['files']
+		if lists:
+			for list in lists:
+				playlist = "special://videoplaylists/%s.xsp" % list['name']
+				if xbmcvfs.exists(playlist):
+					query = xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"Files.GetDirectory","params":{"directory":"%s"},"id":1}' % playlist)
+					query = unicode(query, 'utf-8', errors='ignore')
+					response = json.loads(query)
+					files = response['result']['files']
 
-			if id in (obj['id'] for obj in files):
-				return list['name']
+					if id in (obj['id'] for obj in files):
+						return list['name']
 
 	def handleMessage(self, message):
 		data = json.loads(message)
