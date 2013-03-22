@@ -11,9 +11,9 @@ datadir = Addon.getAddonInfo('profile')
 addondir = Addon.getAddonInfo('path')
 url = "http://ningyou-project.org/api"
 
-sys.path.append(xbmc.translatePath(os.path.join(addondir, 'resources', 'lib')))
+sys.path.append(xbmc.translatePath(os.path.join(addondir, 'resources', 'lib', 'ws4py')))
 
-from threadedclient import WebSocketClient
+from ws4py.client.threadedclient import WebSocketClient
 
 class Ningyou(WebSocketClient):
 	abort = False
