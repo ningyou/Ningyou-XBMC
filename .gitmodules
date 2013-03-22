@@ -1,0 +1,3 @@
+[submodule "service.ningyou/resources/lib/ws4py"]
+	path = service.ningyou/resources/lib/ws4py
+	url = git://github.com/Lawouach/WebSocket-for-Python.git
