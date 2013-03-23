@@ -12,13 +12,19 @@ addondir = Addon.getAddonInfo('path')
 url = "http://ningyou-project.org/api"
 
 sys.path.append(xbmc.translatePath(os.path.join(addondir, 'resources', 'lib', 'ws4py')))
-
 from ws4py.client.threadedclient import WebSocketClient
+
+def encode(string):
+	return string.encode('UTF-8','replace')
+
+def showNotification(title,message):
+	xbmc.executebuiltin("Notification(" + encode(title) + "," + encode(message) + ",8000," + xbmc.translatePath(Addon.getAddonInfo('path') + "/resources/images/clock.png") + ")")
 
 class Ningyou(WebSocketClient):
 	abort = False
 
 	def opened(self):
+		showNotification("Ningyou", "Connected to Websockets")
 		xbmc.log("Ningyou: connected via websockets")
 
 	def closed(self):
@@ -90,12 +96,14 @@ class Ningyou(WebSocketClient):
 						return xbmc.log('Ningyou: Error ' + show_info['error'])
 
 					if int(show_info['episodes']) >= int(info['episode']) or show_info['status'] == "Completed":
+						showNotification('Ningyou', '[%s] %s episode %d already watched' % (info['list'], info['tvshow'], info['episode']))
 						return xbmc.log('Ningyou: [%s] %s episode %d already marked as watched.' % (info['list'], info['tvshow'], info['episode']))
 
 					data = self.API("updateshow", [info['list'],info['seriesid'],info['episode']])
 					if data and 'error' in data:
 						xbmc.log('Ningyou: Error ' + data['error'])
 					elif data:
+						showNotification('Ningyou', '[%s] Updated %s - %d' % (info['list'], info['tvshow'], info['episode']))
 						xbmc.log('Ningyou: [%s] Updated %s to episode %d successfully' % (info['list'], info['tvshow'], info['episode']))
 
 			elif data['method'] == 'System.OnQuit':
